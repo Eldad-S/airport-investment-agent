@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .pytest_cache/
+pytest-cache-files-*/
 .mypy_cache/
 .ruff_cache/
 .coverage
@@ -27,7 +28,8 @@ data/cache/
 *.log
 logs/
 
-# Editors / OS
+# Editors / OS / local tooling
+.claude/
 .vscode/
 .idea/
 .DS_Store
