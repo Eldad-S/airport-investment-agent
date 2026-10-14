@@ -1,0 +1,25 @@
+{
+  "_about": "Curated qualitative context used ONLY as hypotheses in explanations. Not used in any score. Each note cites where to verify it. Verify before relying on it.",
+  "SFO": [
+    {"note": "SFO's two pairs of parallel runways are closely spaced (about 750 ft apart). In low ceilings / poor visibility, side-by-side arrivals are restricted, which substantially cuts the arrival rate - a well-documented driver of SFO ground-delay programs.",
+     "source": "FAA Airport Capacity Profiles; SFO airport publications", "url": "https://www.faa.gov/airports/planning_capacity/profiles"},
+    {"note": "Airfield expansion is physically constrained by San Francisco Bay, so added runway capacity is not a realistic near-term lever; terminal / gate and airspace-procedure improvements are the more plausible levers.",
+     "source": "SFO airport development plans", "url": "https://www.flysfo.com/about/airport-development"}
+  ],
+  "SNA": [
+    {"note": "John Wayne Airport operates under a court-approved Settlement Agreement that caps annual passengers and regulated daily departures, plus a nighttime noise curfew. Capacity is policy-constrained, not only physically constrained, which limits the upside of terminal expansion.",
+     "source": "Orange County / John Wayne Airport (ocair.com)", "url": "https://www.ocair.com/about/settlement-agreement/"}
+  ],
+  "LAX": [
+    {"note": "LAX already has a multi-billion-dollar modernization program underway (Landside Access Modernization Program, terminal redevelopments). Existing committed capital affects how much incremental opportunity remains for a new investor.",
+     "source": "Los Angeles World Airports (flylax.com)", "url": "https://www.flylax.com/lax-modernization"}
+  ],
+  "ANC": [
+    {"note": "ANC is one of the world's busiest all-cargo airports. Passenger enplanements and reporting-carrier passenger flights do not capture its cargo-driven airfield activity.",
+     "source": "FAA all-cargo landed weight statistics", "url": "https://www.faa.gov/airports/planning_capacity/passenger_allcargo_stats/passenger"}
+  ],
+  "BOS": [
+    {"note": "Logan is surrounded by Boston Harbor and dense neighborhoods, so airfield expansion is land-constrained; recent investment has focused on terminals and gates (e.g., Terminal E).",
+     "source": "Massport", "url": "https://www.massport.com/logan-airport"}
+  ]
+}

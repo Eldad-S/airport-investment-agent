@@ -1,0 +1,297 @@
+{
+  "built_at_utc": "2026-10-14T12:28:27+00:00",
+  "sources": {
+    "ourairports": {
+      "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+      "retrieved_at_utc": "2026-10-14T12:28:32+00:00",
+      "rows": 2042
+    },
+    "faa_enplanements": {
+      "urls": [
+        "https://www.faa.gov/airports/planning_capacity/passenger_allcargo_stats/passenger/arp-cy2025-commercial-service-enplanements.xlsx",
+        "https://www.faa.gov/sites/faa.gov/files/airports/planning_capacity/passenger_allcargo_stats/passenger/cy19-commercial-service-enplanements.xlsx"
+      ],
+      "retrieved_at_utc": "2026-10-14T12:28:35+00:00",
+      "rows": 519,
+      "identifier_crosswalk": {
+        "faa_rows": 519,
+        "mapped_identical": 479,
+        "mapped_via_crosswalk": 36,
+        "unmapped": 4
+      }
+    },
+    "bts_ontime": {
+      "url_template": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_{year}_{month}.zip",
+      "retrieved_at_utc": "2026-10-14T12:31:44+00:00",
+      "months": [
+        {
+          "rows_raw": 547271,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 547271,
+          "year": 2024,
+          "month": 1,
+          "file": "ontime_2024_01.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_1.zip",
+          "file_modified_utc": "2026-10-14T12:20:45+00:00"
+        },
+        {
+          "rows_raw": 519221,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 519221,
+          "year": 2024,
+          "month": 2,
+          "file": "ontime_2024_02.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_2.zip",
+          "file_modified_utc": "2026-10-14T12:20:32+00:00"
+        },
+        {
+          "rows_raw": 591767,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 591767,
+          "year": 2024,
+          "month": 3,
+          "file": "ontime_2024_03.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_3.zip",
+          "file_modified_utc": "2026-10-14T12:20:50+00:00"
+        },
+        {
+          "rows_raw": 582185,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 582185,
+          "year": 2024,
+          "month": 4,
+          "file": "ontime_2024_04.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_4.zip",
+          "file_modified_utc": "2026-10-14T12:20:40+00:00"
+        },
+        {
+          "rows_raw": 609743,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 609743,
+          "year": 2024,
+          "month": 5,
+          "file": "ontime_2024_05.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_5.zip",
+          "file_modified_utc": "2026-10-14T12:20:36+00:00"
+        },
+        {
+          "rows_raw": 611132,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 611132,
+          "year": 2024,
+          "month": 6,
+          "file": "ontime_2024_06.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_6.zip",
+          "file_modified_utc": "2026-10-14T12:20:55+00:00"
+        },
+        {
+          "rows_raw": 634613,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 634613,
+          "year": 2024,
+          "month": 7,
+          "file": "ontime_2024_07.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_7.zip",
+          "file_modified_utc": "2026-10-14T12:22:20+00:00"
+        },
+        {
+          "rows_raw": 619025,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 619025,
+          "year": 2024,
+          "month": 8,
+          "file": "ontime_2024_08.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_8.zip",
+          "file_modified_utc": "2026-10-14T12:22:10+00:00"
+        },
+        {
+          "rows_raw": 582622,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 582622,
+          "year": 2024,
+          "month": 9,
+          "file": "ontime_2024_09.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_9.zip",
+          "file_modified_utc": "2026-10-14T12:21:39+00:00"
+        },
+        {
+          "rows_raw": 615497,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 615497,
+          "year": 2024,
+          "month": 10,
+          "file": "ontime_2024_10.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_10.zip",
+          "file_modified_utc": "2026-10-14T12:22:30+00:00"
+        },
+        {
+          "rows_raw": 575404,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 575404,
+          "year": 2024,
+          "month": 11,
+          "file": "ontime_2024_11.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_11.zip",
+          "file_modified_utc": "2026-10-14T12:22:36+00:00"
+        },
+        {
+          "rows_raw": 590581,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 590581,
+          "year": 2024,
+          "month": 12,
+          "file": "ontime_2024_12.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2024_12.zip",
+          "file_modified_utc": "2026-10-14T12:22:27+00:00"
+        },
+        {
+          "rows_raw": 539747,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 539747,
+          "year": 2025,
+          "month": 1,
+          "file": "ontime_2025_01.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_1.zip",
+          "file_modified_utc": "2026-10-14T12:22:55+00:00"
+        },
+        {
+          "rows_raw": 504884,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 504884,
+          "year": 2025,
+          "month": 2,
+          "file": "ontime_2025_02.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_2.zip",
+          "file_modified_utc": "2026-10-14T12:24:02+00:00"
+        },
+        {
+          "rows_raw": 600872,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 600872,
+          "year": 2025,
+          "month": 3,
+          "file": "ontime_2025_03.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_3.zip",
+          "file_modified_utc": "2026-10-14T12:24:33+00:00"
+        },
+        {
+          "rows_raw": 583950,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 583950,
+          "year": 2025,
+          "month": 4,
+          "file": "ontime_2025_04.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_4.zip",
+          "file_modified_utc": "2026-10-14T12:24:11+00:00"
+        },
+        {
+          "rows_raw": 605648,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 605648,
+          "year": 2025,
+          "month": 5,
+          "file": "ontime_2025_05.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_5.zip",
+          "file_modified_utc": "2026-10-14T12:24:57+00:00"
+        },
+        {
+          "rows_raw": 611575,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 611575,
+          "year": 2025,
+          "month": 6,
+          "file": "ontime_2025_06.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_6.zip",
+          "file_modified_utc": "2026-10-14T12:24:11+00:00"
+        },
+        {
+          "rows_raw": 631428,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 631428,
+          "year": 2025,
+          "month": 7,
+          "file": "ontime_2025_07.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_7.zip",
+          "file_modified_utc": "2026-10-14T12:24:45+00:00"
+        },
+        {
+          "rows_raw": 602378,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 602378,
+          "year": 2025,
+          "month": 8,
+          "file": "ontime_2025_08.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_8.zip",
+          "file_modified_utc": "2026-10-14T12:26:22+00:00"
+        },
+        {
+          "rows_raw": 562439,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 562439,
+          "year": 2025,
+          "month": 9,
+          "file": "ontime_2025_09.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_9.zip",
+          "file_modified_utc": "2026-10-14T12:26:17+00:00"
+        },
+        {
+          "rows_raw": 605844,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 605844,
+          "year": 2025,
+          "month": 10,
+          "file": "ontime_2025_10.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_10.zip",
+          "file_modified_utc": "2026-10-14T12:26:12+00:00"
+        },
+        {
+          "rows_raw": 570550,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 570550,
+          "year": 2025,
+          "month": 11,
+          "file": "ontime_2025_11.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_11.zip",
+          "file_modified_utc": "2026-10-14T12:26:23+00:00"
+        },
+        {
+          "rows_raw": 582304,
+          "rows_invalid_airport_code": 0,
+          "rows_duplicate_removed": 0,
+          "rows_clean": 582304,
+          "year": 2025,
+          "month": 12,
+          "file": "ontime_2025_12.zip",
+          "url": "https://transtats.bts.gov/PREZIP/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2025_12.zip",
+          "file_modified_utc": "2026-10-14T12:26:37+00:00"
+        }
+      ],
+      "rows_raw_total": 14080680,
+      "rows_clean_total": 14080680,
+      "duplicates_removed_total": 0
+    }
+  }
+}
