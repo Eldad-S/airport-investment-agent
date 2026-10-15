@@ -40,12 +40,15 @@ st.markdown("""
     position: sticky; top: 3.75rem; z-index: 990;
     background-color: var(--app-bg); padding-top: .25rem;
   }
-  /* Frozen AI-analyst header (title + example questions) just below the tab bar. */
-  div:has(> .st-key-chat_header) {
+  /* Frozen section headers just below the tab bar: any st.container(key="sticky_...").
+     The rule targets Streamlit's same-height wrapper around the keyed container, so the
+     header sticks within its parent block (a whole tab, or one Methodology section). */
+  div:has(> [class*="st-key-sticky_"]) {
     position: sticky; top: calc(3.75rem + 2.75rem); z-index: 980;
     background-color: var(--app-bg); padding-bottom: .5rem;
     border-bottom: 1px solid rgba(128,128,128,.2);
   }
+  .st-key-sticky_overview h1 {padding-top: .25rem; padding-bottom: .25rem;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -130,7 +133,8 @@ tab_overview, tab_chat, tab_opps, tab_compare, tab_detail, tab_method = st.tabs(
 # Overview
 # ---------------------------------------------------------------------------------------
 with tab_overview:
-    st.title("Where would airport capacity investment pay off?")
+    with st.container(key="sticky_overview"):
+        st.title("Where would airport capacity investment pay off?")
     st.markdown("This tool screens **U.S. hub airports** for terminal / capacity investment by combining passenger "
                 "demand, operational congestion and flight activity from **public BTS and FAA data**. It points "
                 "analysts to where due diligence is worth doing - it does not replace it.")
@@ -178,7 +182,7 @@ with tab_chat:
         st.session_state.messages = []
         st.session_state.ctx = ConversationContext()
 
-    with st.container(key="chat_header"):  # sticky (see CSS): examples stay reachable while scrolling
+    with st.container(key="sticky_chat"):  # sticky (see CSS): examples stay reachable while scrolling
         st.subheader("Ask the AI analyst")
         st.caption("Informal questions are fine (e.g. *compare congestion LAX SNA*). The assistant picks deterministic "
                    "analysis tools; it never invents numbers. Follow-ups use the conversation context.")
@@ -235,12 +239,13 @@ with tab_chat:
 # Opportunities
 # ---------------------------------------------------------------------------------------
 with tab_opps:
-    st.subheader("Investment opportunity ranking")
-    f1, f2, f3 = st.columns(3)
-    region = f1.selectbox("Region", ["All U.S."] + list(REGIONS))
-    hubs = f2.multiselect("FAA hub size", ["L", "M", "S"], default=["L", "M", "S"],
-                          format_func=lambda h: {"L": "Large", "M": "Medium", "S": "Small"}[h])
-    conf = f3.multiselect("Evidence confidence", ["High", "Medium", "Low"], default=["High", "Medium", "Low"])
+    with st.container(key="sticky_opps"):
+        st.subheader("Investment opportunity ranking")
+        f1, f2, f3 = st.columns(3)
+        region = f1.selectbox("Region", ["All U.S."] + list(REGIONS))
+        hubs = f2.multiselect("FAA hub size", ["L", "M", "S"], default=["L", "M", "S"],
+                              format_func=lambda h: {"L": "Large", "M": "Medium", "S": "Small"}[h])
+        conf = f3.multiselect("Evidence confidence", ["High", "Medium", "Low"], default=["High", "Medium", "Low"])
     view = ranked_all[ranked_all["hub"].isin(hubs) & ranked_all["confidence"].isin(conf)]
     if region != "All U.S.":
         view = view[view["state"].isin(REGIONS[region])]
@@ -276,8 +281,10 @@ with tab_opps:
 # Compare
 # ---------------------------------------------------------------------------------------
 with tab_compare:
-    st.subheader("Side-by-side comparison (identical period and definitions)")
-    sel = st.multiselect("Airports", all_codes, default=["LAX", "SNA"], format_func=lambda c: label_of[c], max_selections=5)
+    with st.container(key="sticky_compare"):
+        st.subheader("Side-by-side comparison (identical period and definitions)")
+        sel = st.multiselect("Airports", all_codes, default=["LAX", "SNA"], format_func=lambda c: label_of[c],
+                             max_selections=5)
     if len(sel) < 2:
         st.info("Select at least two airports.")
     else:
@@ -300,11 +307,12 @@ with tab_compare:
 # Airport detail
 # ---------------------------------------------------------------------------------------
 with tab_detail:
-    code = st.selectbox("Airport", all_codes, index=all_codes.index("SFO") if "SFO" in all_codes else 0,
-                        format_func=lambda c: label_of[c])
-    m = engine.get_airport_metrics(code)
-    hub = {"L": "Large hub", "M": "Medium hub", "S": "Small hub", "N": "Non-hub"}.get(m.get("hub"), "n/a")
-    st.subheader(f"{code} · {m['name']}")
+    with st.container(key="sticky_detail"):
+        code = st.selectbox("Airport", all_codes, index=all_codes.index("SFO") if "SFO" in all_codes else 0,
+                            format_func=lambda c: label_of[c])
+        m = engine.get_airport_metrics(code)
+        hub = {"L": "Large hub", "M": "Medium hub", "S": "Small hub", "N": "Non-hub"}.get(m.get("hub"), "n/a")
+        st.subheader(f"{code} · {m['name']}")
     st.caption(f"{m['city']}, {m['state']} · FAA {hub} · lat {m['lat']:.3f}, lon {m['lon']:.3f}")
     d1, d2, d3, d4, d5 = st.columns(5)
     if pd.notna(m.get("opportunity_score")):
@@ -366,32 +374,40 @@ with tab_detail:
 # ---------------------------------------------------------------------------------------
 # Methodology & sources
 # ---------------------------------------------------------------------------------------
+def method_section(key: str, title: str):
+    """A section whose heading stays pinned only while the section itself is on screen."""
+    section = st.container(key=f"msec_{key}")
+    with section.container(key=f"sticky_m_{key}"):
+        st.subheader(title)
+    return section
+
+
 with tab_method:
-    st.subheader("Data sources (all public, historical)")
-    st.dataframe(sources_table(ds.manifest), hide_index=True, column_config={"URL": st.column_config.LinkColumn()})
-    st.subheader("Metric registry - observed vs derived")
-    st.dataframe(metrics_registry(), hide_index=True)
-    st.subheader("Scoring model")
-    st.markdown(
-        "1. **Peer set:** FAA large / medium / small hubs with >= 1,000 reporting-carrier departures in "
-        f"CY{CURRENT_YEAR}.\n2. **Normalization:** every input -> percentile among peers (0-100).\n"
-        "3. **Components** (sub-weights below) -> **weighted total** using the sidebar weights.\n"
-        "4. **Missing inputs** are dropped and the remaining weights re-normalized; missing demand or capacity "
-        "evidence -> *insufficient evidence* (no score).\n5. **Confidence** is separate from the score.\n"
-        "6. **Sensitivity:** each weight +/-10pp and an equal-weights case (Opportunities tab).")
-    sub = pd.DataFrame([(COMPONENT_LABELS[c], SUBMETRIC_LABELS[s], f"{w:.0%}") for c, d in
-                        (("demand", DEMAND_SUBWEIGHTS), ("capacity_pressure", CONGESTION_SUBWEIGHTS),
-                         ("operations", OPERATIONS_SUBWEIGHTS)) for s, w in d.items()],
-                       columns=["Component", "Input", "Weight within component"])
-    st.dataframe(sub, hide_index=True)
-    st.subheader("Known limitations")
-    st.markdown(
-        "- Flight data covers **domestic flights by BTS reporting carriers** only (no international, most regional "
-        "or cargo flights). Airports with large international traffic get *Medium* confidence.\n"
-        "- **Congestion is proxied** by delays, taxi-out, NAS delay and peak-hour intensity. Terminal crowding, gate "
-        "utilization and runway capacity are not measured.\n"
-        "- **Unmet demand is never estimated numerically** - it needs load factors, fares, slot/gate requests and "
-        "declared capacity.\n- **Feasibility** (land, regulation, existing capital programs) and **financial returns** "
-        "are not modeled.\n- Data is **historical** (calendar years) and refreshed by `python scripts/build_dataset.py`.")
+    with method_section("sources", "Data sources (all public, historical)"):
+        st.dataframe(sources_table(ds.manifest), hide_index=True, column_config={"URL": st.column_config.LinkColumn()})
+    with method_section("registry", "Metric registry - observed vs derived"):
+        st.dataframe(metrics_registry(), hide_index=True)
+    with method_section("scoring", "Scoring model"):
+        st.markdown(
+            "1. **Peer set:** FAA large / medium / small hubs with >= 1,000 reporting-carrier departures in "
+            f"CY{CURRENT_YEAR}.\n2. **Normalization:** every input -> percentile among peers (0-100).\n"
+            "3. **Components** (sub-weights below) -> **weighted total** using the sidebar weights.\n"
+            "4. **Missing inputs** are dropped and the remaining weights re-normalized; missing demand or capacity "
+            "evidence -> *insufficient evidence* (no score).\n5. **Confidence** is separate from the score.\n"
+            "6. **Sensitivity:** each weight +/-10pp and an equal-weights case (Opportunities tab).")
+        sub = pd.DataFrame([(COMPONENT_LABELS[c], SUBMETRIC_LABELS[s], f"{w:.0%}") for c, d in
+                            (("demand", DEMAND_SUBWEIGHTS), ("capacity_pressure", CONGESTION_SUBWEIGHTS),
+                             ("operations", OPERATIONS_SUBWEIGHTS)) for s, w in d.items()],
+                           columns=["Component", "Input", "Weight within component"])
+        st.dataframe(sub, hide_index=True)
+    with method_section("limits", "Known limitations"):
+        st.markdown(
+            "- Flight data covers **domestic flights by BTS reporting carriers** only (no international, most regional "
+            "or cargo flights). Airports with large international traffic get *Medium* confidence.\n"
+            "- **Congestion is proxied** by delays, taxi-out, NAS delay and peak-hour intensity. Terminal crowding, gate "
+            "utilization and runway capacity are not measured.\n"
+            "- **Unmet demand is never estimated numerically** - it needs load factors, fares, slot/gate requests and "
+            "declared capacity.\n- **Feasibility** (land, regulation, existing capital programs) and **financial returns** "
+            "are not modeled.\n- Data is **historical** (calendar years) and refreshed by `python scripts/build_dataset.py`.")
     st.markdown("<p class='small-note'>Full write-up: docs/architecture.md and docs/data_sources.md in the repository.</p>",
                 unsafe_allow_html=True)
