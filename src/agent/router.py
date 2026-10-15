@@ -67,6 +67,22 @@ def _norm(text: str) -> str:
     return re.sub(r"\s+", " ", t).strip()
 
 
+def normalize_region(value: str | None) -> str | None:
+    """Map a free-form region ("Northeast", "california", "CA", "Pacific Northwest") to a region
+    name in REGIONS or a 2-letter state code. Returns None when it cannot be mapped."""
+    if not value or not value.strip():
+        return None
+    v = value.strip()
+    if v in REGIONS:
+        return v
+    for name in REGIONS:
+        if name.lower() == v.lower():
+            return name
+    if v.upper() in STATE_NAMES and len(v) == 2:
+        return v.upper()
+    return Router.extract_region(v)
+
+
 def _any(patterns: list[str], text: str) -> bool:
     return any(re.search(p, text) for p in patterns)
 
@@ -142,6 +158,9 @@ class Router:
                 return name
         for code, name in STATE_NAMES.items():
             if re.search(r"(?<![a-z])" + re.escape(name) + r"(?![a-z])", low):
+                return code
+        for code, name in (("NY", "new york"), ("WA", "washington")):
+            if low.strip() == name:  # bare state name, e.g. an LLM returning "Washington"
                 return code
         for name in ("new york", "washington"):
             if re.search(rf"\b{name}\b (state|airports)", low):

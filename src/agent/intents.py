@@ -37,6 +37,7 @@ class ParsedQuery(BaseModel):
     operations_weight: Optional[float] = None
     weight_mode: Optional[Literal["absolute", "delta"]] = None
     unknown_codes: list[str] = Field(default_factory=list)
+    unmapped_region: Optional[str] = Field(None, description="Region text that could not be mapped to a known region/state")
     off_topic_subject: Optional[str] = None
     used_context: bool = False
     parser: Literal["rules", "llm"] = "rules"

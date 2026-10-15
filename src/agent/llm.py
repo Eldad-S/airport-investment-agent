@@ -13,6 +13,7 @@ from typing import Literal, Optional
 from pydantic import BaseModel, Field
 
 from src.agent.intents import ConversationContext, IntentName, ParsedQuery
+from src.agent.router import normalize_region
 from src.config import ANTHROPIC_API_KEY, LLM_ENABLED, LLM_MODEL
 
 log = logging.getLogger(__name__)
@@ -104,11 +105,16 @@ class LLMIntentParser:
         codes = [c.strip().upper() for c in out.airports]
         known = [c for c in codes if c in known_codes]
         unknown = [c for c in codes if c not in known_codes]
+        # The LLM may phrase regions freely ("Northeast", "California"); map them with the same
+        # normalizer the rule-based router uses, falling back to the question text itself.
+        region = normalize_region(out.region) or (normalize_region(text) if out.region else None)
+        unmapped_region = out.region if out.region and region is None else None
         intent = out.intent
         if intent in ("compare", "congestion", "long_haul", "demand", "profile", "why_rank") and not known and not unknown:
             intent = "clarify"
         return ParsedQuery(
-            intent=intent, airports=known, region=out.region, focus=out.focus, top_n=out.top_n,
+            intent=intent, airports=known, region=region, unmapped_region=unmapped_region,
+            focus=out.focus, top_n=out.top_n,
             threshold_miles=out.threshold_miles, demand_weight=out.demand_weight,
             capacity_weight=out.capacity_weight, operations_weight=out.operations_weight,
             weight_mode=out.weight_mode, unknown_codes=unknown, off_topic_subject=out.off_topic_subject,

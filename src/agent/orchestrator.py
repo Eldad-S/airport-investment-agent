@@ -139,10 +139,11 @@ class AnalystAgent:
         resp.text = prefix + resp.text
         new_ctx = ctx
         if q.intent not in ("off_topic", "help", "clarify", "unsupported_aviation", "sources", "methodology", "data_needed"):
+            applied_region = q.region if self.engine.region_states(q.region) else None
             new_ctx = ConversationContext(
                 last_intent=q.intent,
                 last_airports=q.airports or ctx.last_airports,
-                last_region=q.region if q.intent == "rank" else ctx.last_region,
+                last_region=applied_region if q.intent == "rank" else ctx.last_region,
                 last_focus=q.focus or ctx.last_focus,
             )
         return resp, new_ctx
@@ -151,10 +152,14 @@ class AnalystAgent:
     def _h_rank(self, q: ParsedQuery, ctx) -> AgentResponse:
         e = self.engine
         top_n = q.top_n or 10
-        ranked, unscored = e.rank_airports(q.region, top_n=top_n)
-        area = q.region or "the U.S."
-        calls = [f"rank_airports(region={q.region!r}, top_n={top_n})"]
+        region = q.region if e.region_states(q.region) else None
+        requested = q.unmapped_region or (q.region if q.region and region is None else None)
+        ranked, unscored = e.rank_airports(region, top_n=top_n)
+        area = region or "the U.S."
+        calls = [f"rank_airports(region={region!r}, top_n={top_n})"]
         n_peers = int((e.scored["status"] == "scored").sum())
+        note = (f"_Note: I couldn't map \"{requested}\" to a region I know (U.S. regions such as New England, "
+                f"Midwest, West Coast, or a state), so this is the **national** ranking._\n\n" if requested else "")
         if ranked.empty:
             txt = f"**Bottom line:** none of the airports in {area} are in the scored peer set of {n_peers} hub airports."
             if not unscored.empty:
@@ -194,7 +199,7 @@ class AnalystAgent:
                        [SCORE_CAVEAT, CONGESTION_CAVEAT, COVERAGE_CAVEAT,
                         "Weights are prototype assumptions (adjust in the sidebar or ask 'what if capacity weight is 50%')."],
                        _conf_summary(list(ranked["confidence"])))
-        return AgentResponse(txt, tables=[("Ranking", table)],
+        return AgentResponse(note + txt, tables=[("Ranking", table)],
                              charts=[charts.score_breakdown_bar(ranked, e.weights, f"Score breakdown - {area}")],
                              tool_calls=calls)
 
