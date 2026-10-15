@@ -29,7 +29,6 @@ st.set_page_config(page_title="Airport Investment Intelligence", page_icon="âœˆï
 
 st.markdown("""
 <style>
-  .block-container {padding-top: 1.6rem;}
   .explain-card {border: 1px solid rgba(128,128,128,.25); border-radius: 10px; padding: 14px 16px; height: 100%;}
   .explain-card h4 {margin: 0 0 6px 0; font-size: 1rem;}
   .explain-card p {margin: 0; font-size: .9rem; opacity: .85;}

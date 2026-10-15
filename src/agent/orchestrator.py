@@ -75,7 +75,10 @@ def format_comparison(df: pd.DataFrame) -> pd.DataFrame:
                 out.loc[idx, col] = fmt_pct(v)
             elif isinstance(v, float):
                 out.loc[idx, col] = fmt_num(v, 1) if v < 1000 else fmt_num(v)
-    return out
+            else:
+                out.loc[idx, col] = str(v)
+    # All cells are display strings so the table serializes cleanly to Arrow (no mixed types).
+    return out.astype(str)
 
 
 def _conf_summary(levels: list[str]) -> str:
