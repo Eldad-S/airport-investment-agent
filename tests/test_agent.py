@@ -74,6 +74,9 @@ def test_weight_what_if_parsing(router):
     ("cheapest flight to BOS", "unsupported_aviation"),
     ("hi", "help"),
     ("how congested is it", "clarify"),  # no airport and no context
+    ("how's the airport near Disney doing", "clarify"),  # on-topic, airport not recognized
+    ("how busy is the airport by the space center", "clarify"),
+    ("tell me a joke about airplanes", "off_topic"),  # aviation word, but clearly unrelated
 ])
 def test_unsupported_and_ambiguous(router, text, intent):
     assert router.parse(text).intent == intent

@@ -288,7 +288,9 @@ class Router:
         if intent is None and ("evidence" in low or "show me" in low or "details" in low) and ctx.last_airports:
             intent, used_ctx = ctx.last_intent if ctx.last_intent in ("congestion", "demand", "long_haul") else "profile", True
         if intent is None:
-            intent = "off_topic"
+            # On-topic wording ("the airport near Disney") but no airport recognized: ask which one
+            # instead of declining. Clearly unrelated requests ("a joke about planes") stay off-topic.
+            intent = "clarify" if aviation_word and not re.search(OFF_TOPIC_HINTS, low) else "off_topic"
 
         # --- Fill missing airports from context ------------------------------------------
         needs_airport = intent in ("compare", "congestion", "long_haul", "demand", "profile", "why_rank")

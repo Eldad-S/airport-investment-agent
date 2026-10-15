@@ -544,5 +544,6 @@ class AnalystAgent:
         return AgentResponse(txt)
 
     def _h_clarify(self, q: ParsedQuery, ctx) -> AgentResponse:
-        return AgentResponse("Which airport do you mean? Give me an IATA code or a name - e.g. _\"how congested is BOS\"_, "
-                             "_\"long haul share ANC\"_ or _\"compare LAX and SNA\"_.")
+        return AgentResponse("I couldn't tell which U.S. airport you mean. I recognize IATA codes, airport names and "
+                             "major cities (not landmarks) - e.g. _\"how's MCO doing\"_, _\"how congested is BOS\"_, "
+                             "_\"long haul share Anchorage\"_ or _\"compare LAX and SNA\"_.")
