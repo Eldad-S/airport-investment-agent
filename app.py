@@ -27,12 +27,25 @@ from src.ui import charts
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 st.set_page_config(page_title="Airport Investment Intelligence", page_icon="✈️", layout="wide")
 
+_app_bg = "#0e1117" if (st.context.theme.type or "light") == "dark" else "#ffffff"
+st.markdown(f"<style>:root {{--app-bg: {_app_bg};}}</style>", unsafe_allow_html=True)
 st.markdown("""
 <style>
   .explain-card {border: 1px solid rgba(128,128,128,.25); border-radius: 10px; padding: 14px 16px; height: 100%;}
   .explain-card h4 {margin: 0 0 6px 0; font-size: 1rem;}
   .explain-card p {margin: 0; font-size: .9rem; opacity: .85;}
   .small-note {font-size: .82rem; opacity: .75;}
+  /* Frozen tab bar: stays visible below Streamlit's header while the page scrolls. */
+  .stTabs [role="tablist"] {
+    position: sticky; top: 3.75rem; z-index: 990;
+    background-color: var(--app-bg); padding-top: .25rem;
+  }
+  /* Frozen AI-analyst header (title + example questions) just below the tab bar. */
+  div:has(> .st-key-chat_header) {
+    position: sticky; top: calc(3.75rem + 2.75rem); z-index: 980;
+    background-color: var(--app-bg); padding-bottom: .5rem;
+    border-bottom: 1px solid rgba(128,128,128,.2);
+  }
 </style>
 """, unsafe_allow_html=True)
 
@@ -161,21 +174,22 @@ with tab_overview:
 # AI Analyst (chat)
 # ---------------------------------------------------------------------------------------
 with tab_chat:
-    st.subheader("Ask the AI analyst")
-    st.caption("Informal questions are fine (e.g. *compare congestion LAX SNA*). The assistant picks deterministic "
-               "analysis tools; it never invents numbers. Follow-ups use the conversation context.")
     if "messages" not in st.session_state:
         st.session_state.messages = []
         st.session_state.ctx = ConversationContext()
 
-    cols = st.columns(3)
-    for i, ex in enumerate(EXAMPLES):
-        if cols[i % 3].button(ex, key=f"ex_{i}", width="stretch"):
-            st.session_state.pending = ex
-    if st.session_state.messages and st.button("🧹 Clear conversation"):
-        st.session_state.messages = []
-        st.session_state.ctx = ConversationContext()
-        st.rerun()
+    with st.container(key="chat_header"):  # sticky (see CSS): examples stay reachable while scrolling
+        st.subheader("Ask the AI analyst")
+        st.caption("Informal questions are fine (e.g. *compare congestion LAX SNA*). The assistant picks deterministic "
+                   "analysis tools; it never invents numbers. Follow-ups use the conversation context.")
+        cols = st.columns(3)
+        for i, ex in enumerate(EXAMPLES):
+            if cols[i % 3].button(ex, key=f"ex_{i}", width="stretch"):
+                st.session_state.pending = ex
+        if st.session_state.messages and st.button("🧹 Clear conversation"):
+            st.session_state.messages = []
+            st.session_state.ctx = ConversationContext()
+            st.rerun()
 
     def render_answer(msg: dict, idx: int):
         st.markdown(msg["text"])
