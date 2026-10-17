@@ -218,6 +218,23 @@ support this*, *compare both airports over the same period*, *show the evidence 
 
 ## What I would change for Production
 
+```mermaid
+flowchart LR
+    A[Public data<br/>BTS · FAA · OurAirports] --> J[Scheduled jobs<br/>Airflow · cron]
+    L[Live feeds<br/>ADS-B · schedules] --> K[Stream / queue<br/>Kafka · Event Hubs]
+    J --> S[(Object storage<br/>raw Parquet)]
+    J --> P[(PostgreSQL<br/>metrics · scores · logs)]
+    K --> P
+    Q[User] --> W[Web UI<br/>Streamlit · Next.js]
+    W --> LB[Load balancer]
+    LB --> API[FastAPI containers<br/>auto-scaling]
+    API --> R[(Redis cache)]
+    API --> P
+    API --> M{Haiku → Sonnet / Opus<br/>rules fallback}
+    M --> T[Deterministic tools<br/>versioned KPI config]
+    E[LLM-as-a-judge evals<br/>in CI] -.-> M
+```
+
 **Data storage**
 - **Object storage (S3 / Azure Blob / GCS)** for raw downloads as partitioned Parquet - cheap, immutable, replayable.
 - **PostgreSQL** (managed: AWS RDS, Azure Database for PostgreSQL, Neon / Supabase) as the serving database for
